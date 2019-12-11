@@ -22,20 +22,21 @@ jobs:
 
     steps:
       - checkout
+        path: ~/api-challenge
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
+            - api-challenge-{{ checksum "pom.xml" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - api-challenge-
 
       - run: mvn dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
+          key: api-challenge-{{ checksum "pom.xml" }}
 
       # run tests!
       - run: mvn integration-test
