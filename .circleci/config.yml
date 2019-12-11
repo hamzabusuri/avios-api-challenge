@@ -1,42 +1,42 @@
-# Java Maven CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
 version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:11.0.1-jdk
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/api-challenge/api-challenge
-
-    environment:
-      # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx3200m
-
+    working_directory: ~/avios-api-challenge
+    
     steps:
-      - checkout:
-        path: ~/api-challenge
+      # git pull
+      - checkout
 
+      # setup testing env
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Login to DockerHub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+            
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - api-challenge-{{ checksum "pom.xml" }}
-            # fallback to using the latest cache if no exact match is found
-            - api-challenge-
+          - avios-api-challenge-{{ checksum "pom.xml" }}
 
       - run: mvn dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: api-challenge-{{ checksum "pom.xml" }}
+          key: avios-api-challenge-{{ checksum "pom.xml" }}
+        
+      # package into a jar
+      - run: mvn clean package
 
-      # run tests!
-      - run: mvn integration-test
+      # build and push docker image to docker hub
+      - run: mvn clean compile jib:build -Dimage=zarinlo/springboot-api:$CIRCLE_BUILD_NUM
+
+      # store raw contents of src code
+      - store_artifacts:
+          path: target/classes
+          destination: avios-api-challenge
