@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  * This stubbed implementation is for purposes of demonstrating application functionality.
  */
 @Service
-public class MovieServiceData implements MovieService {
+public class MovieServiceStub implements MovieService {
 
     /**
      * By default this stubbed method returns an "18" rating if a movieId is not recognised

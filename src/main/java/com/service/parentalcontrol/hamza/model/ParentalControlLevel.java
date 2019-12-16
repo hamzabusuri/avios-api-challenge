@@ -8,41 +8,33 @@ import java.util.Map;
  */
 public enum ParentalControlLevel {
 
-    U("U", 1),
-    PG("PG", 2),
-    _12("12", 3),
-    _15("15", 4),
-    _18("18", 5);
+    UNIVERSAL("U", 0), PARENTAL_GUIDANCE("PG", 1), TWELVE("12", 2), FIFTEEN(
+            "15", 3), EIGHTEEN("18", 4);
 
-    private static final Map<String, Integer> lookup = new HashMap<String, Integer>();
+    private String level;
+    private int value;
 
-    private final String key;
-    private final Integer value;
-
-    static {
-        for (ParentalControlLevel pcl : ParentalControlLevel.values()) {
-            lookup.put(pcl.getKey(), pcl.getValue());
-        }
-    }
-
-    ParentalControlLevel(String key, Integer value) {
-        this.key = key;
+    ParentalControlLevel(String level, int value) {
+        this.level = level;
         this.value = value;
     }
 
-    public String getKey() {
-        return key;
+    public String getLevel() {
+        return level;
     }
 
-    public Integer getValue() {
+    public int getValue() {
         return value;
     }
 
-    public static Integer get(String key) {
-        return lookup.containsKey(key) ? lookup.get(key) : 100;
+    public static ParentalControlLevel findByLevel(String level) {
+        if (level != null) {
+            for (ParentalControlLevel p : values())
+                if (p.getLevel().equals(level)) {
+                    return p;
+                }
+        }
+        return null;
     }
-
-
-
 
 }
