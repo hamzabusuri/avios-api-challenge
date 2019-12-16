@@ -1,7 +1,11 @@
 package com.service.parentalcontrol.hamza;
 
+import com.service.parentalcontrol.hamza.service.MovieService;
+import com.service.parentalcontrol.hamza.service.ParentalControlServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,30 +26,36 @@ public class ParentalControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @Mock
+    private MovieService movieService;
+
+    @InjectMocks
+    private ParentalControlServiceImpl parentalControlService;
+
     @Test
-    public void isMoviePermissible_permissibleMovie_expectIsPermissible() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/alpha").accept(MediaType.APPLICATION_JSON))
+    public void checkParentalControlLevel_permissibleMovie_expectIsPermissible() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/permission/level/PG/movie/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("true")));
     }
 
     @Test
-    public void isMoviePermissible_impermissibleMovie_expectIsNotPermissible() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/echo").accept(MediaType.APPLICATION_JSON))
+    public void checkParentalControlLevel_impermissibleMovie_expectIsNotPermissible() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/2").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("false")));
     }
 
     @Test
-    public void isMoviePermissible_forceError_expectTechnicalFailure() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/foxtrot").accept(MediaType.APPLICATION_JSON))
+    public void checkParentalControlLevel_forceError_expectTechnicalFailure() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/permission/level/A/movie/14").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(status().reason("There has been a system error"));
     }
 
     @Test
-    public void isMoviePermissible_nonExistentMovie_expectTitleNotFoundError() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/idontexist").accept(MediaType.APPLICATION_JSON))
+    public void checkParentalControlLevel_nonExistentMovie_expectTitleNotFoundError() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/6").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason("The movie service could not find the given movie"));
     }

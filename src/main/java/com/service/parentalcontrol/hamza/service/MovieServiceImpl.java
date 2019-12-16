@@ -36,11 +36,11 @@ public class MovieServiceImpl implements MovieService {
 				case 5:
 					result = ParentalControlLevel.EIGHTEEN.getLevel();
 					break;
-				default:
+				case 6:
 					throw new TitleNotFoundException("The movie service could not find the given movie.");
 			}
 		} else {
-			throw new TitleNotFoundException("The movie service could not find the given movie.");
+			throw new TechnicalFailureException("System Error");
 		}
 
 		return result;

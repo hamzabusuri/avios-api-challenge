@@ -27,7 +27,9 @@ public class ParentalControlServiceImpl implements ParentalControlService {
                 response = true;
             }
         }
-        new TechnicalFailureException("System error");
+        else {
+            throw new TechnicalFailureException("System error");
+        }
         return response;
     }
 

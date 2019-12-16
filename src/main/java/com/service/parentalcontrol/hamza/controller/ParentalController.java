@@ -19,7 +19,7 @@ public class ParentalController {
     //create a mapping for the endpoint
     @GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean isMoviePermissible(@PathVariable String pclPreference,
+    public Boolean checkParentalControlLevel(@PathVariable String pclPreference,
                                       @PathVariable String movieId) throws TitleNotFoundException, TechnicalFailureException {
 
         return parentalControlService.checkParentalControlLevel(pclPreference, movieId);

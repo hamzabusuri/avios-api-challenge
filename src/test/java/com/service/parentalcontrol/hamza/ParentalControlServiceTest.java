@@ -14,9 +14,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Aamirio on 17/06/2018.
- */
+
 @RunWith(MockitoJUnitRunner.class)
 public class ParentalControlServiceTest {
 
