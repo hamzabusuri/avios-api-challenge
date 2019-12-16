@@ -22,7 +22,7 @@ public class ParentalController {
     public Boolean isMoviePermissible(@PathVariable String pclPreference,
                                       @PathVariable String movieId) throws TitleNotFoundException, TechnicalFailureException {
 
-        return parentalControlService.isMoviePermissible(pclPreference, movieId);
+        return parentalControlService.checkParentalControlLevel(pclPreference, movieId);
     }
 
     //Throw TitleNotFoundException or TechnicalFailure exception for movies

@@ -18,7 +18,6 @@ import static org.mockito.Mockito.when;
  * Created by Aamirio on 17/06/2018.
  */
 @RunWith(MockitoJUnitRunner.class)
-//@SpringBootTest(classes = Application.class)
 public class ParentalControlServiceTest {
 
     @Mock
@@ -29,38 +28,38 @@ public class ParentalControlServiceTest {
 
 
     @Test
-    public void isMoviePermissible_permissibleMovies_expectIsPermissible() throws TitleNotFoundException {
+    public void isMoviePermissible_permissibleMovies_expectIsPermissible() throws TitleNotFoundException, TechnicalFailureException {
 
         when(movieService.getParentalControlLevel("The Jungle Book")).thenReturn("U");
         when(movieService.getParentalControlLevel("Home Alone")).thenReturn("PG");
         when(movieService.getParentalControlLevel("Junior")).thenReturn("12");
 
-        assertTrue(parentalControlService.isMoviePermissible("U", "The Jungle Book"));
-        assertTrue(parentalControlService.isMoviePermissible("PG", "Home Alone"));
-        assertTrue(parentalControlService.isMoviePermissible("12", "Junior"));
+        assertTrue(parentalControlService.checkParentalControlLevel("U", "The Jungle Book"));
+        assertTrue(parentalControlService.checkParentalControlLevel("PG", "Home Alone"));
+        assertTrue(parentalControlService.checkParentalControlLevel("12", "Junior"));
     }
 
     @Test
-    public void isMoviePermissible_impermissibleMovies_expectIsNotPermissible() throws TitleNotFoundException {
+    public void isMoviePermissible_impermissibleMovies_expectIsNotPermissible() throws TitleNotFoundException, TechnicalFailureException {
 
         when(movieService.getParentalControlLevel("Terminator 2: Judgement Day")).thenReturn("18");
 
-        assertFalse(parentalControlService.isMoviePermissible("12", "Terminator 2: Judgement Day"));
+        assertFalse(parentalControlService.checkParentalControlLevel("12", "Terminator 2: Judgement Day"));
     }
 
     @Test(expected = TitleNotFoundException.class)
-    public void isMoviePermissible_movieNonExistent_expectTitleNotFoundException() throws TitleNotFoundException {
+    public void isMoviePermissible_movieNonExistent_expectTitleNotFoundException() throws TitleNotFoundException, TechnicalFailureException {
 
         when(movieService.getParentalControlLevel("The Rain")).thenThrow(TitleNotFoundException.class);
 
-        parentalControlService.isMoviePermissible("15", "The Rain");
+        parentalControlService.checkParentalControlLevel("15", "The Rain");
     }
 
     @Test(expected = TechnicalFailureException.class)
-    public void isMoviePermissible_runtimeFailure_expectTechnicalFailureException() throws TitleNotFoundException {
+    public void isMoviePermissible_runtimeFailure_expectTechnicalFailureException() throws TechnicalFailureException, TitleNotFoundException {
 
         when(movieService.getParentalControlLevel("***")).thenThrow(TechnicalFailureException.class);
 
-        parentalControlService.isMoviePermissible("U", "***");
+        parentalControlService.checkParentalControlLevel("U", "***");
     }
 }
