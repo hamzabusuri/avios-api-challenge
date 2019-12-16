@@ -7,15 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Hosts the endpoint over HTTP GET.
- */
+
+//hosting the endpoint to connect to restful API service.
 @RestController
 public class ParentalController {
 
+    //inject parental control service into controller to use
     @Autowired
     ParentalControlService parentalControlService;
 
+    //create a mapping for the endpoint
     @GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
     @ResponseStatus(HttpStatus.OK)
     public Boolean isMoviePermissible(@PathVariable String pclPreference,
@@ -24,6 +25,7 @@ public class ParentalController {
         return parentalControlService.isMoviePermissible(pclPreference, movieId);
     }
 
+    //Throw TitleNotFoundException or TechnicalFailure exception for movies
     @ResponseStatus(value=HttpStatus.NOT_FOUND,reason="The movie service could not find the given movie")
     @ExceptionHandler(TitleNotFoundException.class)
     public void handleTitleNotFoundException(){}
