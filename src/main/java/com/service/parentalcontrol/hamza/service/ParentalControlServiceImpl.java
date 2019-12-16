@@ -6,26 +6,29 @@ import com.service.parentalcontrol.hamza.model.ParentalControlLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.service.parentalcontrol.hamza.service.MovieService;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class ParentalControlServiceImpl implements ParentalControlService {
 
-    MovieService movieService;
-
-    public ParentalControlServiceImpl(MovieService movieService) {
-        this.movieService = movieService;
-    }
+    @Autowired
+    private MovieService movieService;
 
     @Override
-    public boolean isMoviePermissible(String pclPreference, String movieId) throws TitleNotFoundException, TechnicalFailureException {
+    public boolean checkParentalControlLevel(String parentalControlLevel, String movieId) throws TitleNotFoundException, TechnicalFailureException {
+        boolean response = false;
+        ParentalControlLevel parentalControlLevelPreference = ParentalControlLevel.findByLevel(parentalControlLevel);
 
-        boolean isMoviePermissible;
+        String movieParentalControl = movieService.getParentalControlLevel(movieId);
+        ParentalControlLevel movieParentalControlLevel = ParentalControlLevel.findByLevel(movieParentalControl);
 
-        String pclMovie = movieService.getParentalControlLevel(movieId);
-
-        int pclMovieValue = ParentalControlLevel.get(pclMovie);
-        int pclPreferenceValue = ParentalControlLevel.get(pclPreference);
-
-        return pclMovieValue > pclPreferenceValue ? false : true;
+        if (movieParentalControlLevel != null && parentalControlLevelPreference != null) {
+            if (movieParentalControlLevel.getValue() <= parentalControlLevelPreference.getValue()) {
+                response = true;
+            }
+        }
+        new TechnicalFailureException("System error");
+        return response;
     }
+
 }
