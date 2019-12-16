@@ -3,11 +3,10 @@ package com.service.parentalcontrol.hamza.service;
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
 import com.service.parentalcontrol.hamza.model.ParentalControlLevel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.service.parentalcontrol.hamza.service.MovieService;
 
-/**
- * Created by Aamirio on 17/06/2018.
- */
 @Service
 public class ParentalControlServiceImpl implements ParentalControlService {
 

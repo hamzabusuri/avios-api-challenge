@@ -1,22 +1,25 @@
 package com.service.parentalcontrol.hamza;
 
+import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
+import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
+import com.service.parentalcontrol.hamza.service.MovieService;
+import com.service.parentalcontrol.hamza.service.ParentalControlServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
-import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
-import com.service.parentalcontrol.hamza.service.MovieService;
-import com.service.parentalcontrol.hamza.service.ParentalControlServiceImpl;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
+/**
+ * Created by Aamirio on 17/06/2018.
+ */
 @RunWith(MockitoJUnitRunner.class)
 //@SpringBootTest(classes = Application.class)
-class ParentalControlServiceTest {
+public class ParentalControlServiceTest {
 
     @Mock
     private MovieService movieService;

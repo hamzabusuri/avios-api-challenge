@@ -2,6 +2,8 @@ package com.service.parentalcontrol.hamza.service;
 
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
+import org.springframework.stereotype.Repository;
+
 
 /**
  * Gets rating for a given movie.
