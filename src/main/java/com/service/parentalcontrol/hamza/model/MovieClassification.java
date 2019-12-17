@@ -10,12 +10,13 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-
-@Builder
-@Data
 @DynamoDBTable(tableName = "movies")
-public class MovieClassification {
+public @Data class MovieClassification implements Serializable{
 
+    @DynamoDBHashKey(attributeName = "movieId")
     private final String movieId;
+
+    @DynamoDBAttribute(attributeName = "identifier")
     private final String identifier;
+
 }
