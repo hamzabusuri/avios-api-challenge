@@ -24,9 +24,12 @@ public class DynamoDbRepository {
     @Autowired
     private DynamoDBMapper mapper;
 
+    public void insertIntoDynamoDB(MovieClassification movie) {
+        mapper.save(movie);
+    }
 
     public MovieClassification getMovieDetails(String movieId, String identifier) {
-        return mapper.load(MovieClassification.class, movieId, identifier);
+        return mapper.load(MovieClassification.class, movieId,identifier);
     }
 
 }

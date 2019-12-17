@@ -2,10 +2,13 @@ package com.service.parentalcontrol.hamza.service;
 
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
+import com.service.parentalcontrol.hamza.model.MovieClassification;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import com.service.parentalcontrol.hamza.model.ParentalControlLevel;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This stubbed implementation is for purposes of demonstrating application functionality.
@@ -45,5 +48,7 @@ public class MovieServiceImpl implements MovieService {
 
 		return result;
 	}
+
+
 
 }

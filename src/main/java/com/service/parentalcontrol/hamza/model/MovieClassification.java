@@ -14,9 +14,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 public @Data class MovieClassification implements Serializable{
 
     @DynamoDBHashKey(attributeName = "movieId")
-    private final String movieId;
+    private String movieId;
 
+    @DynamoDBRangeKey
     @DynamoDBAttribute(attributeName = "identifier")
-    private final String identifier;
+    private String identifier;
 
 }
