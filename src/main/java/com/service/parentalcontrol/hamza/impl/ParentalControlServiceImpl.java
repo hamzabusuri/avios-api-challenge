@@ -15,6 +15,9 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     @Autowired
     private MovieService movieService;
 
+    @Autowired
+    private DynamoDbRepository repo;
+
     boolean result = false;
 
     private final String parental_level_error = "Under age with given level";
@@ -34,7 +37,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     @Override
     public boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException {
-        MovieClassification movieParentalControlLevel = movieService.getParentalControlLevel(movieId);
+        MovieClassification movieParentalControlLevel = repo.getMovieDetails(movieId);
         String movie = movieParentalControlLevel.getIdentifier();
 
         //check if movie exists otherwise throw TitleNotFoundException
@@ -61,7 +64,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     }
 
     private void defaultLevel() throws TechnicalFailureException {
-        throw new TechnicalFailureException("Incorrect parental control level");
+        throw new TechnicalFailureException("Incorrect");
     }
 
     private void watchLevelU(String str) throws TechnicalFailureException {
