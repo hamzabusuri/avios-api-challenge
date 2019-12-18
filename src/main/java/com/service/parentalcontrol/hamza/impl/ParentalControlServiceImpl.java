@@ -18,6 +18,10 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     @Autowired
     private DynamoDbRepository repo;
 
+    boolean result = false;
+
+    private final String SPECIFIED_PARENTAL_LEVEL = "Movie is under specified parental level";
+
 
     public ParentalControlServiceImpl() {
     }
@@ -35,12 +39,86 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     public boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException {
         MovieClassification movieParentalControlLevel = repo.getMovieDetails(movieId);
         String movie = movieParentalControlLevel.getIdentifier();
-        boolean result = false;
 
-        if (movie.equals(userPreference)){
+        /*if (movie.equals(userPreference)){
             result = true;
         }
 
+        return result;*/
+
+        switch (userPreference){
+            case "U": isWatchableU(movie);
+                break;
+            case "PG": isWatchablePG(movie);
+                break;
+            case "12": isWatchable12(movie);
+                break;
+            case "15": isWatchable15(movie);
+                break;
+            case "18": isWatchable18(movie);
+                break;
+            default: isDefault();
+                break;
+
+        }
+
         return result;
+    }
+
+    private void isDefault() throws TechnicalFailureException {
+        throw new TechnicalFailureException("Invalid control level entered");
+    }
+
+    private void isWatchableU(String str) throws TechnicalFailureException {
+        if(str.contains("U")){
+            result = true;
+        }
+
+        else{
+
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
+        }
+
+    }
+
+    private void isWatchablePG(String str) throws TechnicalFailureException {
+        if(str.contains("U") || str.contains("PG")){
+            result = true;
+        }
+        else{
+
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
+        }
+
+    }
+
+    private void isWatchable12(String str) throws TechnicalFailureException {
+        if(str.contains("U") || str.contains("PG") || str.contains("12")){
+            result = true;
+        }
+        else{
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
+        }
+
+    }
+
+    private void isWatchable15(String str) throws TechnicalFailureException {
+        if(str.contains("U") || str.contains("PG") || str.contains("12") || str.contains("15")){
+            result = true;
+        }
+        else{
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
+        }
+
+    }
+
+    private void isWatchable18(String str) throws TechnicalFailureException {
+        if(str.contains("U") || str.contains("PG") || str.contains("12") || str.contains("15") || str.contains("18")){
+            result = true;
+        }
+        else{
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
+        }
+
     }
 }

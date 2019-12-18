@@ -58,7 +58,7 @@ public class ParentalController {
     @ExceptionHandler(TitleNotFoundException.class)
     public void handleTitleNotFoundException(){}
 
-    @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR,reason="There has been a system error")
+    @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR,reason="You cannot watch this movie :)")
     @ExceptionHandler(TechnicalFailureException.class)
     public void handleTechnicalFailureException(){}
 
