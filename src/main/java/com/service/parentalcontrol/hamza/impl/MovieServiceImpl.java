@@ -4,6 +4,7 @@ import com.service.parentalcontrol.hamza.service.MovieService;
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 
@@ -13,7 +14,7 @@ import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 @Service
 public class MovieServiceImpl implements MovieService {
 
-	private String movieId = "";
+	@Autowired
 	private DynamoDbRepository repo;
 
 	@Override
