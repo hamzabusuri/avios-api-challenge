@@ -17,10 +17,10 @@ public class MovieServiceImpl implements MovieService {
 	private DynamoDbRepository repo;
 
 	@Override
-	public String getParentalControlLevel(String movieId) throws TitleNotFoundException, TechnicalFailureException {
+	public MovieClassification getParentalControlLevel(String movieId) throws TitleNotFoundException, TechnicalFailureException {
 		MovieClassification res = repo.getMovieDetails(movieId);
 
-		return res.getIdentifier();
+		return res;
 	}
 
 

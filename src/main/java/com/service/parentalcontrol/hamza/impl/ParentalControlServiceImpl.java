@@ -33,27 +33,14 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     @Override
     public boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException {
-        String movieParentalControlLevel = getParentalControlLevel(movieId);
+        MovieClassification movieParentalControlLevel = repo.getMovieDetails(movieId);
+        String movie = movieParentalControlLevel.getIdentifier();
         boolean result = false;
 
-        if (getParentalControlLevel(movieParentalControlLevel) == "U" && getParentalControlLevel(userPreference) =="U"){
+        if (movie.equals(userPreference)){
             result = true;
         }
 
         return result;
-    }
-
-    private String getParentalControlLevel(String movieId) throws TitleNotFoundException, TechnicalFailureException {
-        try {
-            String controlLevel = getParentalControlLevel(movieId);
-            return controlLevel;
-        } catch (TechnicalFailureException | TitleNotFoundException ex) {
-            //Log exception here
-            throw ex;
-        } catch (Exception ex) {
-            //RuntimeExceptions being thrown from MovieService
-            //Log exception here
-            throw new TechnicalFailureException("There is some problem with Movie Service");
-        }
     }
 }

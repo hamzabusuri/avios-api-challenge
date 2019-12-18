@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ParentalControllerTests {
+public class ParentalControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -37,28 +37,28 @@ public class ParentalControllerTests {
     }
     /*@Test
     public void checkParentalControlLevel_permissibleMovie_expectIsPermissible() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/PG/movie/1").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(MockMvcRequestBuilders.get("/dynamoDb/permission/level/PG/movie/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("true")));
     }
 
     @Test
     public void checkParentalControlLevel_impermissibleMovie_expectIsNotPermissible() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/2").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(MockMvcRequestBuilders.get("/dynamoDb/permission/level/U/movie/2").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("false")));
     }
 
     @Test
     public void checkParentalControlLevel_forceError_expectTechnicalFailure() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/A/movie/14").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(MockMvcRequestBuilders.get("/dynamoDb/permission/level/A/movie/14").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(status().reason("There has been a system error"));
     }
 
     @Test
     public void checkParentalControlLevel_nonExistentMovie_expectTitleNotFoundError() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/permission/level/U/movie/6").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(MockMvcRequestBuilders.get("/dynamoDb/permission/level/U/movie/6").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason("The movie service could not find the given movie"));
     }*/
