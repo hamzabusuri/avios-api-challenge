@@ -11,7 +11,7 @@ public interface ParentalControlService {
 
     /**
      * Checks if movie is suitable for parental control level.
-     * @param userPreference Parental Control Level (Rating) preference
+     * @param parentalControlLevel Parental Control Level (Rating) preference
      * @param movieId id of movie
      * @return
      * @throws TitleNotFoundException If movie is not found.

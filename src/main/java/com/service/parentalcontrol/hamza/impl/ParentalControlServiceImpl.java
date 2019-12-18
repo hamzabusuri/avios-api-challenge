@@ -20,7 +20,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     boolean result = false;
 
-    private final String parental_level_error = "Under age with given level";
+    private final String SPECIFIED_PARENTAL_LEVEL = "Movie is under specified parental level";
 
 
     public ParentalControlServiceImpl() {
@@ -30,7 +30,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
         if (movieService == null) {
             // log information here
-            throw new TechnicalFailureException("Movie service is unavailable");
+            throw new TechnicalFailureException("Movie service is unavailable ");
         }
         this.movieService = movieService;
     }
@@ -40,22 +40,18 @@ public class ParentalControlServiceImpl implements ParentalControlService {
         MovieClassification movieParentalControlLevel = repo.getMovieDetails(movieId);
         String movie = movieParentalControlLevel.getIdentifier();
 
-        //check if movie exists otherwise throw TitleNotFoundException
-
-
-
         switch (userPreference){
-            case "U": watchLevelU(movie);
+            case "U": isWatchableU(movie);
                 break;
-            case "PG": watchLevelPG(movie);
+            case "PG": isWatchablePG(movie);
                 break;
-            case "12": watchLevel12(movie);
+            case "12": isWatchable12(movie);
                 break;
-            case "15": watchLevel15(movie);
+            case "15": isWatchable15(movie);
                 break;
-            case "18": watchLevel18(movie);
+            case "18": isWatchable18(movie);
                 break;
-            default: defaultLevel();
+            default: isDefault();
                 break;
 
         }
@@ -63,56 +59,59 @@ public class ParentalControlServiceImpl implements ParentalControlService {
         return result;
     }
 
-    private void defaultLevel() throws TechnicalFailureException {
-        throw new TechnicalFailureException("Incorrect");
+    private void isDefault() throws TechnicalFailureException {
+        throw new TechnicalFailureException("Invalid control level entered");
     }
 
-    private void watchLevelU(String str) throws TechnicalFailureException {
+    private void isWatchableU(String str) throws TechnicalFailureException {
         if(str.contains("U")){
             result = true;
         }
+
         else{
-            throw new TechnicalFailureException(parental_level_error);
+
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
         }
+
     }
 
-    private void watchLevelPG(String str) throws TechnicalFailureException {
+    private void isWatchablePG(String str) throws TechnicalFailureException {
         if(str.contains("U") || str.contains("PG")){
             result = true;
         }
         else{
 
-            throw new TechnicalFailureException(parental_level_error);
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
         }
 
     }
 
-    private void watchLevel12(String str) throws TechnicalFailureException {
+    private void isWatchable12(String str) throws TechnicalFailureException {
         if(str.contains("U") || str.contains("PG") || str.contains("12")){
             result = true;
         }
         else{
-            throw new TechnicalFailureException(parental_level_error);
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
         }
 
     }
 
-    private void watchLevel15(String str) throws TechnicalFailureException {
+    private void isWatchable15(String str) throws TechnicalFailureException {
         if(str.contains("U") || str.contains("PG") || str.contains("12") || str.contains("15")){
             result = true;
         }
         else{
-            throw new TechnicalFailureException(parental_level_error);
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
         }
 
     }
 
-    private void watchLevel18(String str) throws TechnicalFailureException {
+    private void isWatchable18(String str) throws TechnicalFailureException {
         if(str.contains("U") || str.contains("PG") || str.contains("12") || str.contains("15") || str.contains("18")){
             result = true;
         }
         else{
-            throw new TechnicalFailureException(parental_level_error);
+            throw new TechnicalFailureException(SPECIFIED_PARENTAL_LEVEL + str);
         }
 
     }
