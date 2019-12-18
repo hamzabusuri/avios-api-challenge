@@ -38,12 +38,18 @@ public class ParentalController {
 
 
 
-    @GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
+    /*@GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
     @ResponseStatus(HttpStatus.OK)
     public Boolean checkParentalControlLevel(@PathVariable String pclPreference,
                                       @PathVariable String movieId) throws TitleNotFoundException, TechnicalFailureException {
 
         return parentalControlService.checkParentalControlLevel(pclPreference, movieId);
+    }*/
+
+    @GetMapping
+    public String getMovieDetails(@RequestParam String movieId, @RequestParam String identifier) {
+        MovieClassification movie = repository.getMovieDetails(movieId);
+        return movie.getIdentifier();
     }
 
 

@@ -13,7 +13,6 @@ public interface MovieService {
     /**
      *
      * @param movieId
-     * @param request
      * @return Rating for a given movie.
      * @throws TitleNotFoundException If movie is not found.
      * @throws TechnicalFailureException If a runtime error occurs.

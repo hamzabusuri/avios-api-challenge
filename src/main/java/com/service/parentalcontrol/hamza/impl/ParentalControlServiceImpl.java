@@ -1,4 +1,5 @@
-package com.service.parentalcontrol.hamza.service;
+package com.service.parentalcontrol.hamza.impl;
+import com.service.parentalcontrol.hamza.service.ParentalControlService;
 
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
@@ -6,6 +7,7 @@ import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
+import com.service.parentalcontrol.hamza.service.MovieService;
 
 @Component
 public class ParentalControlServiceImpl implements ParentalControlService {

@@ -19,8 +19,16 @@ import com.service.parentalcontrol.hamza.model.MovieClassification;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
 
-@EnableScan
-public interface DynamoDbRepository extends CrudRepository<MovieClassification, String> {
+@Repository
+public class DynamoDbRepository {
 
-    List<MovieClassification> findByMovieId(String movieId);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDbRepository.class);
+
+    @Autowired
+    private DynamoDBMapper mapper;
+
+
+    public MovieClassification getMovieDetails(String movieId) {
+        return mapper.load(MovieClassification.class, movieId);
+    }
 }

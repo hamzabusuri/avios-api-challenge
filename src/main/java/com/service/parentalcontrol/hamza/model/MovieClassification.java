@@ -16,7 +16,6 @@ public @Data class MovieClassification implements Serializable{
     @DynamoDBHashKey(attributeName = "movieId")
     private String movieId;
 
-    @DynamoDBRangeKey
     @DynamoDBAttribute(attributeName = "identifier")
     private String identifier;
 
