@@ -29,7 +29,6 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     public ParentalControlServiceImpl(MovieService movieService) throws TechnicalFailureException {
 
         if (movieService == null) {
-            // log information here
             throw new TechnicalFailureException("Movie service is unavailable ");
         }
         this.movieService = movieService;
@@ -37,27 +36,41 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     @Override
     public boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException {
-        MovieClassification movieParentalControlLevel = repo.getMovieDetails(movieId);
-        String movie = movieParentalControlLevel.getIdentifier();
+        boolean movieExists = repo.movieExists(movieId);
 
-        switch (userPreference){
-            case "U": isWatchableU(movie);
-                break;
-            case "PG": isWatchablePG(movie);
-                break;
-            case "12": isWatchable12(movie);
-                break;
-            case "15": isWatchable15(movie);
-                break;
-            case "18": isWatchable18(movie);
-                break;
-            default: isDefault();
-                break;
+        if (movieExists) {
+            MovieClassification movieParentalControlLevel = movieService.getParentalControlLevel(movieId);
+            String movie = movieParentalControlLevel.getIdentifier();
 
+            switch (userPreference) {
+                case "U":
+                    isWatchableU(movie);
+                    break;
+                case "PG":
+                    isWatchablePG(movie);
+                    break;
+                case "12":
+                    isWatchable12(movie);
+                    break;
+                case "15":
+                    isWatchable15(movie);
+                    break;
+                case "18":
+                    isWatchable18(movie);
+                    break;
+                default:
+                    isDefault();
+                    break;
+
+            }
         }
 
+        else{
+            throw new TitleNotFoundException("Movie does not exist");
+        }
         return result;
     }
+
 
     private void isDefault() throws TechnicalFailureException {
         throw new TechnicalFailureException("Invalid control level entered");

@@ -34,7 +34,6 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 public class DynamoDbRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDbRepository.class);
-    boolean doesExist = false;
 
     @Autowired
     private DynamoDBMapper mapper;
@@ -44,17 +43,14 @@ public class DynamoDbRepository {
         return mapper.load(MovieClassification.class, movieId);
     }
 
-    /*public boolean getMovieFromDBUsingMovieId(String movieId) throws TitleNotFoundException {
-        MovieClassification item = mapper.load(MovieClassification.class, movieId);
+    public boolean movieExists(String movieId){
+        boolean exists = false;
 
-        if(item != null){
-            doesExist = true;
+        MovieClassification itemRetrieved = mapper.load(MovieClassification.class, movieId);
+
+        if(itemRetrieved != null){
+            exists = true;
         }
-        else{
-            throw new TitleNotFoundException("Movie does not exist");
-        }
-
-        return doesExist;
-
-    }*/
+        return exists;
+    }
 }

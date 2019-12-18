@@ -3,6 +3,7 @@ package com.service.parentalcontrol.hamza.controller;
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
+import com.service.parentalcontrol.hamza.model.ParentalControlRating;
 import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 import com.service.parentalcontrol.hamza.service.ParentalControlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +24,14 @@ public class ParentalController {
     @Autowired
     private DynamoDbRepository repository;
 
-   /*@PostMapping
-    public String insertIntoDynamoDB(@RequestBody MovieClassification movie) {
-        repository.insertIntoDynamoDB(movie);
-        return "Successfully inserted into DynamoDB table";
-    }*/
-
-    /*@GetMapping
-    public ResponseEntity<MovieClassification> getMovieDetails(@RequestParam String movieId, @RequestParam String identifier) {
-        MovieClassification movie = repository.getMovieDetails(movieId);
-        return new ResponseEntity<MovieClassification>(movie, HttpStatus.OK);
-    }*/
-
-
-
 
     @GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Boolean checkParentalControlLevel(@PathVariable String movieId,
-                                      @PathVariable String pclPreference) throws TitleNotFoundException, TechnicalFailureException {
-        return parentalControlService.checkParentalControlLevel(movieId,pclPreference);
+    public ParentalControlRating checkParentalControlLevel(@PathVariable String movieId,
+                                                           @PathVariable String pclPreference) throws TitleNotFoundException, TechnicalFailureException {
+        boolean check = parentalControlService.checkParentalControlLevel(movieId,pclPreference);
+        return ParentalControlRating.builder().movieId(movieId).canWatch(check).build();
     }
 
     @GetMapping
@@ -58,7 +46,7 @@ public class ParentalController {
     @ExceptionHandler(TitleNotFoundException.class)
     public void handleTitleNotFoundException(){}
 
-    @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR,reason="You cannot watch this movie :)")
+    @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR,reason="System error: You cannot watch this movie :)")
     @ExceptionHandler(TechnicalFailureException.class)
     public void handleTechnicalFailureException(){}
 

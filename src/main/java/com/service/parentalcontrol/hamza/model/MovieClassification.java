@@ -14,6 +14,15 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName = "movies")
 public @Data class MovieClassification implements Serializable{
 
+    public MovieClassification(String movieId, String identifier) {
+        this.movieId = movieId;
+        this.identifier = identifier;
+    }
+
+    public MovieClassification(){
+
+    }
+
     @DynamoDBHashKey(attributeName = "movieId")
     private String movieId;
 
