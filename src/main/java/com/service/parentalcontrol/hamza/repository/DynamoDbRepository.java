@@ -1,6 +1,7 @@
 package com.service.parentalcontrol.hamza.repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -15,21 +16,11 @@ import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
+import org.springframework.data.repository.CrudRepository;
 
-@Repository
-public class DynamoDbRepository {
+@EnableScan
+public interface DynamoDbRepository extends CrudRepository<MovieClassification, String> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDbRepository.class);
-
-    @Autowired
-    private DynamoDBMapper mapper;
-
-    public void insertIntoDynamoDB(MovieClassification movie) {
-        mapper.save(movie);
-    }
-
-    public MovieClassification getMovieDetails(String movieId, String identifier) {
-        return mapper.load(MovieClassification.class, movieId,identifier);
-    }
-
+    List<MovieClassification> findByMovieId(String movieId);
 }

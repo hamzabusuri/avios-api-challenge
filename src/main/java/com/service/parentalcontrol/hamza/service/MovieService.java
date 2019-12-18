@@ -2,8 +2,7 @@ package com.service.parentalcontrol.hamza.service;
 
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
-import com.service.parentalcontrol.hamza.model.MovieClassification;
-import java.util.List;
+
 import org.springframework.stereotype.Service;
 /**
  * Gets rating for a given movie.
@@ -14,6 +13,7 @@ public interface MovieService {
     /**
      *
      * @param movieId
+     * @param request
      * @return Rating for a given movie.
      * @throws TitleNotFoundException If movie is not found.
      * @throws TechnicalFailureException If a runtime error occurs.

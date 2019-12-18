@@ -17,5 +17,5 @@ public interface ParentalControlService {
      * @throws TitleNotFoundException If movie is not found.
      * @throws TechnicalFailureException If runtime error occurs.
      */
-    boolean checkParentalControlLevel(String parentalControlLevel, String movieId) throws TitleNotFoundException, TechnicalFailureException;
+    boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException;
 }

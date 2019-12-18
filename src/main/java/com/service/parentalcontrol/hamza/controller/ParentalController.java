@@ -23,22 +23,21 @@ public class ParentalController {
     @Autowired
     private DynamoDbRepository repository;
 
-    @PostMapping
+   /*@PostMapping
     public String insertIntoDynamoDB(@RequestBody MovieClassification movie) {
         repository.insertIntoDynamoDB(movie);
         return "Successfully inserted into DynamoDB table";
-    }
+    }*/
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<MovieClassification> getMovieDetails(@RequestParam String movieId, @RequestParam String identifier) {
-        MovieClassification movie = repository.getMovieDetails(movieId, identifier);
+        MovieClassification movie = repository.getMovieDetails(movieId);
         return new ResponseEntity<MovieClassification>(movie, HttpStatus.OK);
-    }
+    }*/
 
 
 
 
-    //create a mapping for the endpoint
     @GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
     @ResponseStatus(HttpStatus.OK)
     public Boolean checkParentalControlLevel(@PathVariable String pclPreference,
