@@ -23,7 +23,4 @@ public class MovieServiceImpl implements MovieService {
 
 		return res;
 	}
-
-
-
 }
