@@ -1,5 +1,6 @@
 package com.service.parentalcontrol.hamza;
 
+import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 import com.service.parentalcontrol.hamza.service.MovieService;
 import com.service.parentalcontrol.hamza.impl.ParentalControlServiceImpl;
 import org.junit.Test;

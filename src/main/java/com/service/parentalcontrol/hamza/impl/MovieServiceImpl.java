@@ -19,8 +19,8 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public MovieClassification getParentalControlLevel(String movieId) throws TitleNotFoundException, TechnicalFailureException {
-		MovieClassification res = repo.getMovieDetails(movieId);
+		MovieClassification movie = repo.getMovieDetails(movieId);
 
-		return res;
+		return movie;
 	}
 }

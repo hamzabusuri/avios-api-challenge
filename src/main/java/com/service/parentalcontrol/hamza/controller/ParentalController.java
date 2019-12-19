@@ -34,13 +34,6 @@ public class ParentalController {
         return ParentalControlRating.builder().movieId(movieId).canWatch(check).build();
     }
 
-    @GetMapping
-    public String getMovieDetails(@RequestParam String movieId, @RequestParam String identifier) {
-        MovieClassification movie = repository.getMovieDetails(movieId);
-        return movie.getIdentifier();
-    }
-
-
     //Throw TitleNotFoundException or TechnicalFailure exception for movies
     @ResponseStatus(value=HttpStatus.NOT_FOUND,reason="The movie service could not find the given movie")
     @ExceptionHandler(TitleNotFoundException.class)

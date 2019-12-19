@@ -39,26 +39,34 @@ public class ParentalControlServiceImpl implements ParentalControlService {
             MovieClassification movieParentalControlLevel = movieService.getParentalControlLevel(movieId);
             String movie = movieParentalControlLevel.getIdentifier();
 
-            switch (userPreference) {
-                case "U":
-                    canWatchU(movie);
-                    break;
-                case "PG":
-                    canWatchPG(movie);
-                    break;
-                case "12":
-                    canWatch12(movie);
-                    break;
-                case "15":
-                    canWatch15(movie);
-                    break;
-                case "18":
-                    canWatch18(movie);
-                    break;
-                default:
-                    isDefault();
-                    break;
+            if (userPreference.isEmpty())
+            {
+                throw new TechnicalFailureException("empty parental control level");
+            }
+            else {
 
+
+                switch (userPreference) {
+                    case "U":
+                        canWatchU(movie);
+                        break;
+                    case "PG":
+                        canWatchPG(movie);
+                        break;
+                    case "12":
+                        canWatch12(movie);
+                        break;
+                    case "15":
+                        canWatch15(movie);
+                        break;
+                    case "18":
+                        canWatch18(movie);
+                        break;
+                    default:
+                        isDefault();
+                        break;
+
+                }
             }
         }
 

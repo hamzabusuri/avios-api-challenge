@@ -26,10 +26,6 @@ import java.util.stream.Collectors;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 
-
-
-
-
 @Repository
 public class DynamoDbRepository {
 
