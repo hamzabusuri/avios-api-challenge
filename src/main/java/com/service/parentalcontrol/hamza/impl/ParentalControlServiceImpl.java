@@ -41,7 +41,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
             if (userPreference.isEmpty())
             {
-                throw new TechnicalFailureException("empty parental control level");
+                throw new TechnicalFailureException("empty parental control");
             }
             else {
 
