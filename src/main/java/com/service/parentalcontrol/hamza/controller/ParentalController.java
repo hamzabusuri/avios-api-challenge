@@ -9,12 +9,14 @@ import com.service.parentalcontrol.hamza.service.ParentalControlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 
 //hosting the endpoint to connect to restful API service.
 @RestController
 @RequestMapping("/dynamoDb")
+@Api(value = "Movie Service REST API")
 public class ParentalController {
 
     //inject parental control service into controller to use
@@ -25,6 +27,7 @@ public class ParentalController {
     private DynamoDbRepository repository;
 
 
+    @ApiOperation(value = "Returns true or false depending on if user can watch movie")
     @GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
