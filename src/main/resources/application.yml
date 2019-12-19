@@ -7,3 +7,7 @@ amazon:
     url: dynamodb.us-east-1.amazonaws.com
 server:
   port: 9001
+
+spring:
+  application:
+    name: movies
