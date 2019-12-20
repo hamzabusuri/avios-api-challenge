@@ -1,0 +1,13 @@
+amazon:
+  access:
+    key: 'AKIAJ4JJ7PF26GZST4JA'
+    secret-key: '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'
+  region: us-east-1
+  end-point:
+    url: dynamodb.us-east-1.amazonaws.com
+server:
+  port: 9001
+
+spring:
+  application:
+    name: movies
