@@ -26,6 +26,14 @@ STAGE=$2
 # AWS Region where app should be deployed e.g. `us-east-1`, `eu-central-1`
 REGION=$3
 
+AWS_ACCOUNT_ID=$4
+
+AWS_ACCOUNT_ID=$4
+
+AWS_ACCESS_KEY_ID=$5
+
+AWS_SECRET_ACCESS_KEY=$6
+
 # Hash of commit for better identification
 #SHA1=$4
 
