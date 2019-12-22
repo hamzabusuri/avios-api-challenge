@@ -79,6 +79,7 @@ ZIP=$VERSION.zip
 
 echo Deploying $NAME to environment $STAGE, region: $REGION, version: $VERSION, bucket: $EB_BUCKET
 
+aws configure
 aws configure set default.region $REGION
 aws configure set default.output json
 
