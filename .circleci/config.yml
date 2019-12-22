@@ -44,7 +44,7 @@ jobs:
 
       - run:
           name: Run script
-          command: sudo sh ./deploy.sh
+          command: sudo sh ./deploy.sh pcs-app test us-east-1
 
       - save_cache:
           paths:
