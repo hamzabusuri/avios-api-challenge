@@ -38,15 +38,4 @@ public class DynamoDbRepository {
     public MovieClassification getMovieDetails(String movieId) {
         return mapper.load(MovieClassification.class, movieId);
     }
-
-    public boolean movieExists(String movieId){
-        boolean exists = false;
-
-        MovieClassification itemRetrieved = mapper.load(MovieClassification.class, movieId);
-
-        if(itemRetrieved != null){
-            exists = true;
-        }
-        return exists;
-    }
 }

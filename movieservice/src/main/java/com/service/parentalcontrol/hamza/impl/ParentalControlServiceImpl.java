@@ -1,9 +1,9 @@
 package com.service.parentalcontrol.hamza.impl;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.service.parentalcontrol.hamza.service.ParentalControlService;
 
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
-import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
@@ -16,34 +16,19 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     private MovieService movieService;
 
     @Autowired
-    private DynamoDbRepository repo;
+    private DynamoDBMapper mapper;
 
     boolean result = false;
+    boolean exists = false;
 
     public ParentalControlServiceImpl() {
     }
 
-    public ParentalControlServiceImpl(MovieService movieService) throws TechnicalFailureException {
-
-        if (movieService == null) {
-            throw new TechnicalFailureException("Movie service is unavailable");
-        }
-        this.movieService = movieService;
-    }
-
     @Override
     public boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException {
-        boolean movieExists = repo.movieExists(movieId);
-
-        if (movieExists) {
-            MovieClassification movieParentalControlLevel = movieService.getParentalControlLevel(movieId);
-            String movie = movieParentalControlLevel.getIdentifier();
-
-            if (userPreference.isEmpty())
-            {
-                throw new TechnicalFailureException("empty parental control");
-            }
-            else {
+        boolean movieexists = movieExists(movieId);
+        if(movieexists){
+            String movie= movieService.getParentalControlLevel(movieId);
 
 
                 switch (userPreference) {
@@ -66,13 +51,13 @@ public class ParentalControlServiceImpl implements ParentalControlService {
                         isDefault();
                         break;
 
-                }
+
             }
         }
+            else{
+                throw new TitleNotFoundException("Movie not found");
+                }
 
-        else{
-            throw new TitleNotFoundException("Movie does not exist");
-        }
         return result;
     }
 
@@ -130,5 +115,18 @@ public class ParentalControlServiceImpl implements ParentalControlService {
             result = false;
         }
 
+    }
+
+    public boolean movieExists(String movieId) throws TitleNotFoundException {
+        MovieClassification itemRetrieved = mapper.load(MovieClassification.class, movieId);
+
+        if(itemRetrieved != null){
+            exists = true;
+        }
+
+        else{
+            throw new TitleNotFoundException("not exist");
+        }
+        return exists;
     }
 }

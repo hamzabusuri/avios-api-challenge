@@ -27,12 +27,6 @@ public class ParentalControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Mock
-    private MovieService movieService;
-
-    @InjectMocks
-    private ParentalControlServiceImpl parentalControlService;
-
     @Test
     public void contextLoads() {
     }
