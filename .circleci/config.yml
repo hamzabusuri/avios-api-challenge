@@ -33,9 +33,13 @@ jobs:
       - run: mvn dependency:go-offline
 
       - run:
+         name: Install pip
+         command: |
+            sudo apt update
+            sudo apt install -y python-pip python-dev
+      - run:
           name: Install awscli
-          command: |
-            sudo pip install --upgrade pip
+          command:
             sudo pip install awscli
 
       - run:
