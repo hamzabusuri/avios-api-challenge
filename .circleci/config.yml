@@ -44,7 +44,7 @@ jobs:
 
       - run:
           name: Run script
-          command: sudo /deploy.sh
+          command: sudo sh ./deploy.sh
 
       - save_cache:
           paths:
