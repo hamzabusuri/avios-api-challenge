@@ -3,6 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
+orbs:
+  aws-ecr: circleci/aws-ecr@0.0.2
 jobs:
   build:
     docker:
@@ -44,22 +46,11 @@ jobs:
           name: Install awscli
           command:
             sudo pip install awscli
-      - run:
-          command: |
-            echo "test"
-            sudo curl -L -o /tmp/docker.tgz https://get.docker.com/builds/Linux/x86_64/docker-1.12.3.tgz
-            sudo tar -xz -C /tmp -f /tmp/docker.tgz
-            sudo mv /tmp/docker/docker* /usr/bin/
 
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
-            sudo chmod +x  /usr/bin/docker-compose
-
-      - setup_remote_docker
-      
-      - run:
-          command: |
-            docker --version
-            docker run hello-world
+      - aws-ecr/build_and_push_image:
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          region: ${AWS_DEFAULT_REGION}
 
       - run:
           name: Run script
