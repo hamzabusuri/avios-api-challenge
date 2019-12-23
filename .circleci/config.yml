@@ -47,8 +47,7 @@ jobs:
           command:
             sudo pip install awscli
 
-      - run:
-        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+
       - run:
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
