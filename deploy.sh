@@ -98,7 +98,8 @@ eval $(sudo curl -L -o /tmp/docker.tgz https://get.docker.com/builds/Linux/x86_6
             sudo curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
             sudo chmod +x  /usr/bin/docker-compose)
 
-eval $(docker-machine env)
+[[ $(docker-machine status) == "Stopped" ]] && docker-machine start
+eval $(sudo docker-machine env)
 
 docker login -u $DOCKER_USER -p $DOCKER_PASS
 # Build the image
