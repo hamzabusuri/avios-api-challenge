@@ -61,7 +61,7 @@ jobs:
       - run:
           name: Run script
           command: |
-            zip -r $ZIP Dockerrun.aws.json
+            zip -r $ZIP Dockerrun.aws.json .
 
             # Send zip to S3 Bucket
             aws s3 cp $ZIP s3://$EB_BUCKET/$ZIP
