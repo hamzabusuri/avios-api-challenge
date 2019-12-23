@@ -6,7 +6,7 @@ amazon:
   end-point:
     url: dynamodb.us-east-1.amazonaws.com
 server:
-  port: 5000
+  port: 8080
 
 spring:
   application:
