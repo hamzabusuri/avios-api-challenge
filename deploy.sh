@@ -34,6 +34,10 @@ AWS_ACCESS_KEY_ID=$5
 
 AWS_SECRET_ACCESS_KEY=$6
 
+DOCKER_USER=$7
+
+DOCKER_PASS=$8
+
 # Hash of commit for better identification
 #SHA1=$4
 
@@ -87,8 +91,9 @@ aws configure set default.output json
 # Login to AWS Elastic Container Registry
 eval $(aws ecr get-login --no-include-email)
 
-# Build the image
 
+docker login -u $DOCKER_USER -p $DOCKER_PASS
+# Build the image
 docker build -t $NAME:$VERSION .
 # Tag it
 docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
