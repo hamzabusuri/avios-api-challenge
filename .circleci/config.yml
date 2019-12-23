@@ -48,6 +48,8 @@ jobs:
             sudo pip install awscli
 
       - run:
+        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
       - run:
@@ -57,7 +59,9 @@ jobs:
           command: docker tag pcs-app:latest 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
 # Push to AWS Elastic Container Registry
       - run:
-          command: docker push 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
+          command: |
+          eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+          docker push 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
       - run:
           name: Run script
           command: sudo sh ./deploy.sh pcs-app test $AWS_DEFAULT_REGION 934897518238 AKIAJ4JJ7PF26GZST4JA 1ZsCzsQ1Q0PoHGsqGMA2PcYkhnUHTTEdvq3KnYHh
