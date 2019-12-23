@@ -46,11 +46,6 @@ jobs:
           name: Install awscli
           command:
             sudo pip install awscli
-
-      - run:
-          name: Install docker
-          command:
-            sudo pip install docker-compose
       
       - run:
           name: Docker login
