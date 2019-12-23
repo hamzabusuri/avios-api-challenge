@@ -59,6 +59,10 @@ jobs:
 # Push to AWS Elastic Container Registry
       - run:
           command: |
+            eval $(aws configure set aws_access_key_id 934897518238)
+            eval $(aws configure set aws_secret_access_key AKIAJ4JJ7PF26GZST4JA)
+            eval $(aws configure set default.region $AWS_DEFAULT_REGION)
+            eval $(aws configure set default.output json)
             eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
             docker push 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
       - run:
