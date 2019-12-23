@@ -90,15 +90,6 @@ aws configure set default.output json
 
 # Login to AWS Elastic Container Registry
 eval $(aws ecr get-login --no-include-email)
-
-eval $(sudo curl -L -o /tmp/docker.tgz https://get.docker.com/builds/Linux/x86_64/docker-1.12.3.tgz
-            sudo tar -xz -C /tmp -f /tmp/docker.tgz
-            sudo mv /tmp/docker/docker* /usr/bin/
-
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
-            sudo chmod +x  /usr/bin/docker-compose)
-
-[[ $(docker-machine status) == "Stopped" ]] && docker-machine start
 eval $(sudo docker-machine env)
 
 docker login -u $DOCKER_USER -p $DOCKER_PASS
