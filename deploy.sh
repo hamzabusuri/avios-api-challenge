@@ -89,11 +89,11 @@ eval $(aws ecr get-login --no-include-email)
 
 # Build the image
 
-sudo docker build -t $NAME:$VERSION .
+docker build -t $NAME:$VERSION .
 # Tag it
-sudo docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
+docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
 # Push to AWS Elastic Container Registry
-sudo docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
 
 # Replace the <AWS_ACCOUNT_ID> with your ID
 #sed -i='' "s/<AWS_ACCOUNT_ID>/$AWS_ACCOUNT_ID/" Dockerrun.aws.json
