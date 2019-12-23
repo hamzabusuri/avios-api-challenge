@@ -53,6 +53,9 @@ jobs:
           command: |
             eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
             docker push $FULL_IMAGE_NAME
+      - run:
+          name: Run script
+          command: sudo sh ./deploy.sh pcs-app test us-east-1 934897518238 AKIAJ4JJ7PF26GZST4JA 1ZsCzsQ1Q0PoHGsqGMA2PcYkhnUHTTEdvq3KnYHh hamzab96 Queenmary_2019
 workflows:
   build-deploy:
     jobs:
