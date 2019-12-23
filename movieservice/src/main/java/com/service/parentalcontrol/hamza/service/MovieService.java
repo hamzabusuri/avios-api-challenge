@@ -18,6 +18,6 @@ public interface MovieService {
      * @throws TitleNotFoundException If movie is not found.
      * @throws TechnicalFailureException If a runtime error occurs.
      */
-    public MovieClassification getParentalControlLevel(String movieId) throws TitleNotFoundException, TechnicalFailureException;
+    public String getParentalControlLevel(String movieId) throws TitleNotFoundException, TechnicalFailureException;
 
 }

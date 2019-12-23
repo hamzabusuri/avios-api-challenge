@@ -1,41 +1,143 @@
-# Java Maven CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
-version: 2
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@0.1.4
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx3200m
-
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: mvn dependency:go-offline
-
-      - save_cache:
+      - setup_remote_docker
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}"' >> $BASH_ENV
+      - run:
+          name: Build docker image
+          command: |
+            docker build -t $FULL_IMAGE_NAME .
+      - run:
+          name: Save image to an archive
+          command: |
+            mkdir docker-image
+            docker save -o docker-image/image.tar $FULL_IMAGE_NAME
+      - persist_to_workspace:
+          root: .
           paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
+            - docker-image
+  deploy-dev:
+    docker:
+      - image: circleci/python:3.6.1
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: workspace
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: "$AWS_ACCESS_KEY_ID"
+          aws-region: "$AWS_DEFAULT_REGION"
+      - run:
+          name: Load image
+          command: |
+            docker load --input workspace/docker-image/image.tar
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export STAGE="dev"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export EB_BUCKET="${AWS_RESOURCE_NAME_PREFIX}-deployments-$STAGE"' >> $BASH_ENV
+            echo 'export NAME="${AWS_RESOURCE_NAME_PREFIX}-$STAGE"' >> $BASH_ENV
+            echo 'export ENV="${AWS_RESOURCE_NAME_PREFIX}-$STAGE"' >> $BASH_ENV
+            echo 'export VERSION="$STAGE-$(date +%s)"' >> $BASH_ENV
+            echo 'export ZIP="$VERSION.zip"' >> $BASH_ENV
+      - run:
+          name: Push image
+          command: |
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $FULL_IMAGE_NAME
+      - run:
+          name: Run script
+          command: |
+            zip -r $ZIP Dockerrun.aws.json .
 
-      # run tests!
-      - run: mvn integration-test
+            # Send zip to S3 Bucket
+            aws s3 cp $ZIP s3://$EB_BUCKET/$ZIP
+
+            # Create a new application version with the zipped up Dockerrun file
+            aws elasticbeanstalk create-application-version --application-name $NAME --version-label $VERSION --source-bundle S3Bucket=$EB_BUCKET,S3Key=$ZIP
+
+            # Update the environment to use the new application version
+            aws elasticbeanstalk update-environment --environment-name $ENV --version-label $VERSION
+
+  deploy-prod:
+    docker:
+      - image: circleci/python:3.6.1
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: workspace
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: "$AWS_ACCESS_KEY_ID"
+          aws-region: "$AWS_DEFAULT_REGION"
+      - run:
+          name: Load image
+          command: |
+            docker load --input workspace/docker-image/image.tar
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export STAGE="prod"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export EB_BUCKET="${AWS_RESOURCE_NAME_PREFIX}-deployments-$STAGE"' >> $BASH_ENV
+            echo 'export NAME="${AWS_RESOURCE_NAME_PREFIX}-$STAGE"' >> $BASH_ENV
+            echo 'export ENV="${AWS_RESOURCE_NAME_PREFIX}-$STAGE"' >> $BASH_ENV
+            echo 'export VERSION="$STAGE-$(date +%s)"' >> $BASH_ENV
+            echo 'export ZIP="$VERSION.zip"' >> $BASH_ENV
+      - run:
+          name: Push image
+          command: |
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $FULL_IMAGE_NAME
+      - run:
+          name: Run script
+          command: |
+            zip -r $ZIP Dockerrun.aws.json .
+
+            # Send zip to S3 Bucket
+            aws s3 cp $ZIP s3://$EB_BUCKET/$ZIP
+
+            # Create a new application version with the zipped up Dockerrun file
+            aws elasticbeanstalk create-application-version --application-name $NAME --version-label $VERSION --source-bundle S3Bucket=$EB_BUCKET,S3Key=$ZIP
+
+            # Update the environment to use the new application version
+            aws elasticbeanstalk update-environment --environment-name $ENV --version-label $VERSION
+workflows:
+  build-deploy:
+    jobs:
+      - build
+      - deploy-dev:
+          requires:
+            - build
+          filters:
+            branches:
+              only: dev
+
+      - hold: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          requires: # We only run the "hold" job when test2 has succeeded
+            - deploy-dev
+
+      - deploy-prod:
+          requires:
+            - hold
+          filters:
+            branches:
+              only: master
