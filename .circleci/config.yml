@@ -5,17 +5,14 @@
 version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@0.0.2
+jobs:
+  build:
+    aws-ecr/build_and_push_image:
+      account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+      repo: "${AWS_RESOURCE_NAME_PREFIX}"
+      region: "${AWS_DEFAULT_REGION}"
 
-
-workflows:
-  build-and-deploy:
-    jobs:
-      - aws-ecr/build_and_push_image:
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
-          region: "${AWS_DEFAULT_REGION}"
-      - deploy
-deploy:
+  deploy:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -67,3 +64,9 @@ deploy:
 
       # run tests!
       - run: mvn integration-test
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy
