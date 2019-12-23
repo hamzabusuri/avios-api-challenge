@@ -79,29 +79,27 @@ ZIP=$VERSION.zip
 
 echo Deploying $NAME to environment $STAGE, region: $REGION, version: $VERSION, bucket: $EB_BUCKET
 
-aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
 aws configure set default.region $REGION
 aws configure set default.output json
 
 # Login to AWS Elastic Container Registry
-eval $(aws ecr get-login)
+eval $(aws ecr get-login --no-include-email)
 
 # Build the image
 docker build -t $NAME:$VERSION .
 # Tag it
-docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME:$VERSION
+docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
 # Push to AWS Elastic Container Registry
-docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME:$VERSION
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
 
 # Replace the <AWS_ACCOUNT_ID> with your ID
-sed -i='' "s/<AWS_ACCOUNT_ID>/$AWS_ACCOUNT_ID/" Dockerrun.aws.json
+#sed -i='' "s/<AWS_ACCOUNT_ID>/$AWS_ACCOUNT_ID/" Dockerrun.aws.json
 # Replace the <NAME> with the your name
-sed -i='' "s/<NAME>/$NAME/" Dockerrun.aws.json
+#sed -i='' "s/<NAME>/$NAME/" Dockerrun.aws.json
 # Replace the <REGION> with the selected region
-sed -i='' "s/<REGION>/$REGION/" Dockerrun.aws.json
+#sed -i='' "s/<REGION>/$REGION/" Dockerrun.aws.json
 # Replace the <TAG> with the your version number
-sed -i='' "s/<TAG>/$VERSION/" Dockerrun.aws.json
+#sed -i='' "s/<TAG>/$VERSION/" Dockerrun.aws.json
 
 # Zip up the Dockerrun file
 zip -r $ZIP Dockerrun.aws.json
