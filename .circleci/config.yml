@@ -54,7 +54,7 @@ jobs:
           command: docker build -t pcs-app:latest .
 # Tag it
       - run:
-          command: docker tag pcs-app:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
+          command: docker tag pcs-app:latest 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
 # Push to AWS Elastic Container Registry
       - run:
           command: docker push 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
