@@ -56,8 +56,8 @@ jobs:
       - run:
           name: Run script
           command: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASS
-          sudo sh ./deploy.sh pcs-app test us-east-1 934897518238 AKIAJ4JJ7PF26GZST4JA 1ZsCzsQ1Q0PoHGsqGMA2PcYkhnUHTTEdvq3KnYHh hamzab96 Queenmary_2019
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            sudo sh ./deploy.sh pcs-app test us-east-1 934897518238 AKIAJ4JJ7PF26GZST4JA 1ZsCzsQ1Q0PoHGsqGMA2PcYkhnUHTTEdvq3KnYHh hamzab96 Queenmary_2019
 workflows:
   build-deploy:
     jobs:
