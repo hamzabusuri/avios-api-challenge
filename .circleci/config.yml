@@ -6,6 +6,8 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@0.0.2
 jobs:
+  docker:
+    - image: circleci/python:3.6.1
   build:
     aws-ecr/build_and_push_image:
       account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
