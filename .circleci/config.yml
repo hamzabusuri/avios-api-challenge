@@ -1,78 +1,62 @@
-# Java Maven CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
-version: 2
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@0.1.4
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx3200m
-      AWS_ACCOUNT_ID: "${AWS_ACCOUNT_ID}"
-      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
-      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-
+      - image: circleci/openjdk:8-jdk-alpine
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
       - setup_remote_docker
-
-      - run: mvn dependency:go-offline
-
       - run:
-         name: Install pip
-         command: |
-            sudo apt update
-            sudo apt install -y python-pip python-dev
-      - run:
-          name: Install awscli
-          command:
-            sudo pip install awscli
-
-
-      - run:
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-
-      - run:
-          command: docker build -t pcs-app:latest .
-# Tag it
-      - run:
-          command: docker tag pcs-app:latest 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
-# Push to AWS Elastic Container Registry
-      - run:
+          name: Setup common environment variables
           command: |
-            eval $(aws configure set aws_access_key_id 934897518238)
-            eval $(aws configure set aws_secret_access_key AKIAJ4JJ7PF26GZST4JA)
-            eval $(aws configure set default.region $AWS_DEFAULT_REGION)
-            eval $(aws configure set default.output json)
-            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-            docker push 934897518238.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/pcs-app
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}"' >> $BASH_ENV
       - run:
-          name: Run script
-          command: sudo sh ./deploy.sh pcs-app test $AWS_DEFAULT_REGION 934897518238 AKIAJ4JJ7PF26GZST4JA 1ZsCzsQ1Q0PoHGsqGMA2PcYkhnUHTTEdvq3KnYHh
-
-      - save_cache:
+          name: Build image
+          command: |
+            docker build -t $FULL_IMAGE_NAME .
+      - run:
+          name: Save image to an archive
+          command: |
+            mkdir docker-image
+            docker save -o docker-image/image.tar $FULL_IMAGE_NAME
+      - persist_to_workspace:
+          root: .
           paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-
-      # run tests!
-      - run: mvn integration-test
+            - docker-image
+  deploy:
+    docker:
+      - image: circleci/python:3.6.1
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: workspace
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: "$AWS_ACCESS_KEY_ID"
+          aws-region: "$AWS_DEFAULT_REGION"
+      - run:
+          name: Load image
+          command: |
+            docker load --input workspace/docker-image/image.tar
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}"' >> $BASH_ENV
+      - run:
+          name: Push image
+          command: |
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $FULL_IMAGE_NAME
+workflows:
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
