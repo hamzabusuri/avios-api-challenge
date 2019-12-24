@@ -1,19 +1,3 @@
-#!/bin/bash
-# Script used to deploy applications to AWS Elastic Beanstalk
-# Should be hooked to CircleCI post.test or deploy step
-#
-# Does three things:
-# 1. Builds Docker image & pushes it to container registry
-# 2. Generates new `Dockerrun.aws.json` file which is Beanstalk task definition
-# 3. Creates new Beanstalk Application version using created task definition
-#
-# REQUIREMENTS!
-# - AWS_ACCOUNT_ID env variable
-# - AWS_ACCESS_KEY_ID env variable
-# - AWS_SECRET_ACCESS_KEY env variable
-#
-# usage: ./deploy.sh name-of-application staging us-east-1 f0478bd7c2f584b41a49405c91a439ce9d944657
-
 set -e
 start=`date +%s`
 
@@ -28,18 +12,9 @@ REGION=$3
 
 AWS_ACCOUNT_ID=$4
 
-AWS_ACCOUNT_ID=$4
-
 AWS_ACCESS_KEY_ID=$5
 
 AWS_SECRET_ACCESS_KEY=$6
-
-DOCKER_USER=$7
-
-DOCKER_PASS=$8
-
-# Hash of commit for better identification
-#SHA1=$4
 
 if [ -z "$NAME" ]; then
   echo "Application NAME was not provided, aborting deploy!"
@@ -56,11 +31,6 @@ if [ -z "$REGION" ]; then
   exit 1
 fi
 
-#if [ -z "$SHA1" ]; then
-#  echo "Application SHA1 was not provided, aborting deploy!"
-#  exit 1
-#fi
-
 if [ -z "$AWS_ACCOUNT_ID" ]; then
   echo "AWS_ACCOUNT_ID was not provided, aborting deploy!"
   exit 1
@@ -76,34 +46,25 @@ if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
   exit 1
 fi
 
-EB_BUCKET=$NAME-deployments
+EB_BUCKET=$NAME-deployments-$STAGE
 ENV=$NAME-$STAGE
 VERSION=$STAGE-$(date +%s)
 ZIP=$VERSION.zip
 
 echo Deploying $NAME to environment $STAGE, region: $REGION, version: $VERSION, bucket: $EB_BUCKET
 
-
-#aws configure set default.region $REGION
-#aws configure set default.output json
+aws configure set default.region $REGION
+aws configure set default.output json
 
 # Login to AWS Elastic Container Registry
-#eval $(aws ecr get-login --no-include-email)
-# Build the image
-#docker build -t $NAME:$VERSION .
-# Tag it
-#docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
-# Push to AWS Elastic Container Registry
-#docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
+eval $(aws ecr get-login)
 
-# Replace the <AWS_ACCOUNT_ID> with your ID
-sed -i='' "s/<AWS_ACCOUNT_ID>/$AWS_ACCOUNT_ID/" Dockerrun.aws.json
-# Replace the <NAME> with the your name
-sed -i='' "s/<NAME>/$NAME/" Dockerrun.aws.json
-# Replace the <REGION> with the selected region
-sed -i='' "s/<REGION>/$REGION/" Dockerrun.aws.json
-# Replace the <TAG> with the your version number
-sed -i='' "s/<TAG>/$VERSION/" Dockerrun.aws.json
+# Build the image
+docker build -t $NAME:$VERSION .
+# Tag it
+docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME:$VERSION
+# Push to AWS Elastic Container Registry
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME:$VERSION
 
 # Zip up the Dockerrun file
 zip -r $ZIP Dockerrun.aws.json
