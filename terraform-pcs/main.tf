@@ -113,3 +113,24 @@ resource "aws_elastic_beanstalk_environment" "ng_beanstalk_application_environme
     value     = "${aws_iam_instance_profile.ng_beanstalk_ec2.name}"
   }
 }
+
+resource "aws_dynamodb_table" "basic-dynamodb-table" {
+  name           = "movies"
+  read_capacity  = 20
+  write_capacity = 20
+  hash_key       = "movieId"
+
+  attribute {
+    name = "movieId"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name               = "movies"
+    hash_key           = "movieId"
+    write_capacity     = 10
+    read_capacity      = 10
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["movieId"]
+  }
+}

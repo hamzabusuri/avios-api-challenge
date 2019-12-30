@@ -21,14 +21,15 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     boolean result = false;
     boolean exists = false;
 
-    public ParentalControlServiceImpl() {
+    public ParentalControlServiceImpl (MovieService movieService) {
+        this.movieService = movieService;
     }
 
     @Override
     public boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException {
-        boolean movieexists = movieExists(movieId);
-        if(movieexists){
-            String movie= movieService.getParentalControlLevel(movieId);
+        boolean mExists = movieExists(movieId);
+        if(mExists){
+            String movie = movieService.getParentalControlLevel(movieId);
 
 
                 switch (userPreference) {

@@ -60,11 +60,11 @@ aws configure set default.output json
 eval $(aws ecr get-login)
 
 # Build the image
-docker build -t $NAME:$VERSION .
+docker build -t $NAME .
 # Tag it
-docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME:$VERSION
+docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
 # Push to AWS Elastic Container Registry
-docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME:$VERSION
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
 
 # Zip up the Dockerrun file
 zip -r $ZIP Dockerrun.aws.json
