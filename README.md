@@ -61,5 +61,9 @@ If running the REST API service through beanstalk, on either the development or 
 
 For more information on which end-points can be hit, append /swagger-ui.html at the end of either the localhost url or AWS beanstalk application url.
 
+NOTE: When running with the zuul gateway, before running each end-point shown above, it would start with /movies/ then you can append the end-points given in the example.
+
+## Movie Data
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
