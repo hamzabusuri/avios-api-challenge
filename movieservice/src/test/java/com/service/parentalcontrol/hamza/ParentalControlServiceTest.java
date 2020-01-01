@@ -24,12 +24,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,52 +52,61 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.platform.commons.logging.LoggerFactory;
+import org.junit.platform.commons.logging.Logger;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest(classes = DynamoDbConfig.class)
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest()
 public class ParentalControlServiceTest {
 
-    @Spy
-    private ParentalControlServiceImpl parentalControlService;
-
-    @Spy
     private MovieService movieService;
 
-    @Mock
+    @InjectMocks
+    private ParentalControlService pcs;
+
+    /*@InjectMocks
     private DynamoDbRepository repository;
 
-    @InjectMocks
+    @Mock
     private DynamoDBMapper mapper;
 
     @Mock
     private DynamoDbConfig config;
 
     @Mock
-    private AmazonDynamoDB amazonDynamoDB;
+    private AmazonDynamoDB amazonDynamoDB;*/
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     @Test
     public void contextLoads() {
     }
 
 
-    /*@Test(expected = TechnicalFailureException.class)
-    public void isMoviePermissible_runtimeFailure_expectTechnicalFailureException() throws TechnicalFailureException, TitleNotFoundException {
-        MovieClassification movie = MovieClassification.builder().movieId("1").identifier("U").build();
-        when(parentalControlService.checkParentalControlLevel(movie.getMovieId(), "***")).thenThrow(TechnicalFailureException.class);
-    }*/
+    @Before
+    public void setup() throws TechnicalFailureException, TitleNotFoundException {
+        movieService = mock(MovieService.class, RETURNS_SMART_NULLS);
+    }
 
-    /*private void setMovieFromDBOutput(String classification) {
-        when(mapper.load(MovieClassification.class,"12345"))
-                .thenReturn(MovieClassification.builder()
-                        .movieId("12345")
-                        .identifier(classification)
-                        .build());
-    }*/
+    @Test
+    public void testGetParentalControlLevel() throws Exception {
+        final String movieId = "1";
+        final String userLevel = "U";
+        final String movieLevel = "U";
+        when(movieService.getParentalControlLevel(movieId)).thenReturn(movieLevel);
+        ParentalControlService pcs = new ParentalControlServiceImpl(movieService);
+        assertTrue(movieService.getParentalControlLevel(movieId).equals("U"));
+    }
 
-    public AmazonDynamoDB amazonDynamoDBConfig() {
-        return AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("dynamodb.us-east-1.amazonaws.com", "us-east-1"))
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("AKIAJ4JJ7PF26GZST4JA", "1ZsCzsQ1Q0PoHGsqGMA2PcYkhnUHTTEdvq3KnYHh")))
-                .build();
+    @Test
+    public void invalidParentalControlLevel() throws Exception {
+        final String movieId = "1";
+        final String userLevel = "***";
+        final String movieLevel = "***";
+        when(movieService.getParentalControlLevel(movieId)).thenReturn(movieLevel);
+        ParentalControlService pcs = new ParentalControlServiceImpl(movieService);
+        assertFalse(movieService.getParentalControlLevel(movieId).equals("U"));
     }
 
 

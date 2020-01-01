@@ -1,7 +1,7 @@
 {
     "AWSEBDockerrunVersion": "1",
     "Image": {
-      "Name": "934897518238.dkr.ecr.us-east-1.amazonaws.com/pcs-app",
+      "Name": "550682864466.dkr.ecr.us-east-1.amazonaws.com/pcs-app",
       "Update": "true"
     },
     "Ports": [
