@@ -47,8 +47,8 @@ NOTE: PORT numbers for both the zuul gateway and rest api service will be differ
 
 ## Accessing it through Elastic beanstalk
 
-- Development [URL](pcs-app-dev.yfwwjakn29.us-east-1.elasticbeanstalk.com)
-- Production [URL](pcs-app-prod.7sc6pmxnec.us-east-1.elasticbeanstalk.com)
+- Development [URL](http://pcs-app-dev.yfwwjakn29.us-east-1.elasticbeanstalk.com)
+- Production [URL](http://pcs-app-prod.7sc6pmxnec.us-east-1.elasticbeanstalk.com)
 
 
 ## Usage
