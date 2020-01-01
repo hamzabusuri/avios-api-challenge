@@ -65,5 +65,13 @@ NOTE: When running with the zuul gateway, before running each end-point shown ab
 
 ## Movie Data
 
+| Movie ID       | Level          | 
+| ------------- |:-------------:| 
+| 1      | U | 
+| 2     | PG      |
+| 3 | 12     |
+| 4    | 15      | 
+| 5 | 18      |
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
