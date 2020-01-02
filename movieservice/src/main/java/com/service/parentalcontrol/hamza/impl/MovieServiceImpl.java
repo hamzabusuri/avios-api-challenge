@@ -6,12 +6,13 @@ import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  * This stubbed implementation is for purposes of demonstrating application functionality.
  */
-@Service
+@Component
 public class MovieServiceImpl implements MovieService {
 
 	@Autowired

@@ -23,10 +23,6 @@ public class ParentalController {
     @Autowired
     ParentalControlService parentalControlService;
 
-    @Autowired
-    private DynamoDbRepository repository;
-
-
     @ApiOperation(value = "Returns true or false depending on if user can watch movie")
     @GetMapping("/permission/level/{pclPreference}/movie/{movieId}")
     @ResponseStatus(HttpStatus.OK)
