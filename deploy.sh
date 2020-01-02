@@ -16,6 +16,8 @@ AWS_ACCESS_KEY_ID=$5
 
 AWS_SECRET_ACCESS_KEY=$6
 
+ECR_REPOSITORY_NAME=$7
+
 if [ -z "$NAME" ]; then
   echo "Application NAME was not provided, aborting deploy!"
   exit 1
@@ -46,8 +48,14 @@ if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
   exit 1
 fi
 
+if [ -z "$ECR_REPOSITORY_NAME" ]; then
+  echo "ECR Repo name was not provided was not provided, aborting deploy!"
+  exit 1
+fi
+
 EB_BUCKET=$NAME-deployments-$STAGE
 ENV=$NAME-$STAGE
+NAME=$NAME-$STAGE
 VERSION=$STAGE-$(date +%s)
 ZIP=$VERSION.zip
 
@@ -57,14 +65,14 @@ aws configure set default.region $REGION
 aws configure set default.output json
 
 # Login to AWS Elastic Container Registry
-eval $(aws ecr get-login)
+eval $(aws ecr get-login --no-include-email)
 
 # Build the image
-docker build -t $NAME .
+docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPOSITORY_NAME .
 # Tag it
-docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
+docker tag $ECR_REPOSITORY_NAME $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPOSITORY_NAME
 # Push to AWS Elastic Container Registry
-docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$NAME
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPOSITORY_NAME
 
 # Zip up the Dockerrun file
 zip -r $ZIP Dockerrun.aws.json
