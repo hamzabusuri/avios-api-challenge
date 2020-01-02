@@ -128,7 +128,7 @@ NOTE: When running with the zuul gateway, before running each end-point shown ab
 ## Kibana
 - It is important that application logs are monitored frequently and to do this, I created an Elasticsearch domain which pulls in Cloudwatch logs from the Elastic beanstalk application. Once pulled, the information is displayed in Kibana and the requests made in the application can be visualised in line graphs or time series etc.
 
-- Access the Kibana dashboard [here](http://https://search-pcs-domain-wab3hwjugsxd2vokrtmgmoxufm.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/home?_g=())
+- Access the Kibana dashboard [here](https://search-pcs-domain-wab3hwjugsxd2vokrtmgmoxufm.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/home?_g=())
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
