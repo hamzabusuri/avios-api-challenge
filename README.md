@@ -2,6 +2,7 @@
 
 Parental Control API Service is a REST API hosted on a beanstalk application in AWS and is used to check whether a user is able to watch a movie based on their parental control level preference. The SpringBoot framework was used to create this REST API service as well as cloud resources to host the service.
 
+
 As well as hosting the service on AWS, the REST API can be run locally and a zuul gateway was created which allows the client to connect to the REST API end-point.
 
 ## Tech Stack
@@ -129,6 +130,5 @@ NOTE: When running with the zuul gateway, before running each end-point shown ab
 - It is important that application logs are monitored frequently and to do this, I created an Elasticsearch domain which pulls in Cloudwatch logs from the Elastic beanstalk application. Once pulled, the information is displayed in Kibana and the requests made in the application can be visualised in line graphs or time series etc.
 
 - Access the Kibana dashboard [here](https://search-pcs-domain-wab3hwjugsxd2vokrtmgmoxufm.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/home?_g=())
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
