@@ -1,8 +1,12 @@
 package com.service.parentalcontrol.hamza.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
 
-
+@Getter
+@Setter
 public class ErrorResponse {
 
     private Integer status;
@@ -17,45 +21,5 @@ public class ErrorResponse {
         this.setErrorMessage((String) errorAttributes.get("message"));
         this.setTimeStamp(errorAttributes.get("timestamp").toString());
         this.setTrace((String) errorAttributes.get("trace"));
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    private void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    private void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    private void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getTrace() {
-        return trace;
-    }
-
-    private void setTrace(String trace) {
-        this.trace = trace;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    private void setPath(String path) {
-        this.path = path;
     }
 }
