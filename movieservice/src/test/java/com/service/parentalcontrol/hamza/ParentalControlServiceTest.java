@@ -63,11 +63,10 @@ public class ParentalControlServiceTest {
 
     private MovieService movieService;
 
-    @InjectMocks
     private ParentalControlService pcs;
 
-    /*@InjectMocks
-    private DynamoDbRepository repository;
+    @InjectMocks
+    private ParentalControlServiceImpl impl;
 
     @Mock
     private DynamoDBMapper mapper;
@@ -76,7 +75,7 @@ public class ParentalControlServiceTest {
     private DynamoDbConfig config;
 
     @Mock
-    private AmazonDynamoDB amazonDynamoDB;*/
+    private AmazonDynamoDB amazonDynamoDB;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Test
@@ -87,26 +86,62 @@ public class ParentalControlServiceTest {
     @Before
     public void setup() throws TechnicalFailureException, TitleNotFoundException {
         movieService = mock(MovieService.class, RETURNS_SMART_NULLS);
+        pcs = mock(ParentalControlService.class, RETURNS_SMART_NULLS);
     }
 
     @Test
-    public void testGetParentalControlLevel() throws Exception {
-        final String movieId = "1";
-        final String userLevel = "U";
-        final String movieLevel = "U";
+    public void testCanWatch() throws Exception {
+        MovieClassification movie = MovieClassification.builder().movieId("1").identifier("U").build();
+
+        String movieId = movie.getMovieId();
+        String userLevel = "U";
+        String movieLevel = movie.getIdentifier();
+
         when(movieService.getParentalControlLevel(movieId)).thenReturn(movieLevel);
-        ParentalControlService pcs = new ParentalControlServiceImpl(movieService);
-        assertTrue(movieService.getParentalControlLevel(movieId).equals("U"));
+        when(pcs.checkParentalControlLevel(movieId, userLevel)).thenReturn(true);
+        assertTrue(pcs.checkParentalControlLevel(movieId, userLevel));
     }
 
     @Test
-    public void invalidParentalControlLevel() throws Exception {
-        final String movieId = "1";
-        final String userLevel = "***";
-        final String movieLevel = "***";
+    public void testCannotWatch() throws Exception {
+        MovieClassification movie = MovieClassification.builder().movieId("2").identifier("PG").build();
+
+        String movieId = movie.getMovieId();
+        String userLevel = "U";
+        String movieLevel = movie.getIdentifier();
+
         when(movieService.getParentalControlLevel(movieId)).thenReturn(movieLevel);
-        ParentalControlService pcs = new ParentalControlServiceImpl(movieService);
-        assertFalse(movieService.getParentalControlLevel(movieId).equals("U"));
+        when(pcs.checkParentalControlLevel(movieId, userLevel)).thenReturn(false);
+        assertFalse(pcs.checkParentalControlLevel(movieId, userLevel));
+
+    }
+
+    @Test(expected=TitleNotFoundException.class)
+    public void testMovieNotExist() throws Exception {
+        MovieClassification movie = MovieClassification.builder().movieId("6").identifier("U").build();
+
+        String movieId = movie.getMovieId();
+        String userLevel = "U";
+        String movieLevel = movie.getIdentifier();
+
+        when(movieService.getParentalControlLevel(movieId)).thenReturn(movieLevel);
+        when(pcs.checkParentalControlLevel(movieId, userLevel)).thenThrow(TitleNotFoundException.class);
+        pcs.checkParentalControlLevel(movieId, userLevel);
+
+    }
+
+    @Test(expected=TechnicalFailureException.class)
+    public void testSystemError() throws Exception {
+        MovieClassification movie = MovieClassification.builder().movieId("1").identifier("U").build();
+
+        String movieId = movie.getMovieId();
+        String userLevel = "***";
+        String movieLevel = movie.getIdentifier();
+
+        when(movieService.getParentalControlLevel(movieId)).thenReturn(movieLevel);
+        when(pcs.checkParentalControlLevel(movieId, userLevel)).thenThrow(TechnicalFailureException.class);
+        pcs.checkParentalControlLevel(movieId, userLevel);
+
     }
 
 
