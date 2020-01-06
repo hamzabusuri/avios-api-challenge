@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/hamzabusuri/avios-api-challenge.svg?style=svg)](https://circleci.com/gh/hamzabusuri/avios-api-challenge)
+[![CircleCI](https://circleci.com/gh/hamzabusuri/avios-api-challenge/tree/dev.svg?style=svg)](https://circleci.com/gh/hamzabusuri/avios-api-challenge/tree/dev)
 
 # Parental Control API Service
 
