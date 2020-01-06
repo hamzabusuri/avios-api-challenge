@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/hamzabusuri/avios-api-challenge.svg?style=svg)](https://circleci.com/gh/hamzabusuri/avios-api-challenge)
+
 # Parental Control API Service
 
 Parental Control API Service is a REST API hosted on a beanstalk application in AWS and is used to check whether a user is able to watch a movie based on their parental control level preference. The SpringBoot framework was used to create this REST API service as well as cloud resources to host the service.
