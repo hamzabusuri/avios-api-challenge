@@ -1,7 +1,6 @@
 package com.service.parentalcontrol.hamza.controller;
 
-;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.service.parentalcontrol.hamza.model.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -9,11 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import com.service.parentalcontrol.hamza.model.ErrorResponse;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+;
 
 
 @Controller

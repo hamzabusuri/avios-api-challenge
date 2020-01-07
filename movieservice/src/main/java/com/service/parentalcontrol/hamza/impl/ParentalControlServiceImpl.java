@@ -1,13 +1,13 @@
 package com.service.parentalcontrol.hamza.impl;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.service.parentalcontrol.hamza.service.ParentalControlService;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
 import com.service.parentalcontrol.hamza.service.MovieService;
+import com.service.parentalcontrol.hamza.service.ParentalControlService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ParentalControlServiceImpl implements ParentalControlService {
@@ -56,7 +56,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
             }
         }
             else{
-                throw new TitleNotFoundException("Movie not found");
+                throw new TitleNotFoundException("The movie service could not find the given movie");
                 }
 
         return result;
@@ -64,10 +64,10 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
 
     private void isDefault() throws TechnicalFailureException {
-        throw new TechnicalFailureException("Invalid control level entered");
+        throw new TechnicalFailureException("System error");
     }
 
-    private void canWatchU(String str) throws TechnicalFailureException {
+    private void canWatchU(String str){
         if(str.contains("U")){
             result = true;
         }
@@ -78,7 +78,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     }
 
-    private void canWatchPG(String str) throws TechnicalFailureException {
+    private void canWatchPG(String str){
         if(str.contains("U") || str.contains("PG")){
             result = true;
         }
@@ -88,7 +88,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     }
 
-    private void canWatch12(String str) throws TechnicalFailureException {
+    private void canWatch12(String str){
         if(str.contains("U") || str.contains("PG") || str.contains("12")){
             result = true;
         }
@@ -98,7 +98,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     }
 
-    private void canWatch15(String str) throws TechnicalFailureException {
+    private void canWatch15(String str){
         if(str.contains("U") || str.contains("PG") || str.contains("12") || str.contains("15")){
             result = true;
         }
@@ -108,7 +108,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
 
     }
 
-    private void canWatch18(String str) throws TechnicalFailureException {
+    private void canWatch18(String str){
         if(str.contains("U") || str.contains("PG") || str.contains("12") || str.contains("15") || str.contains("18")){
             result = true;
         }
@@ -126,7 +126,7 @@ public class ParentalControlServiceImpl implements ParentalControlService {
         }
 
         else{
-            throw new TitleNotFoundException("not exist");
+            throw new TitleNotFoundException("The movie service could not find the given movie");
         }
         return exists;
     }
