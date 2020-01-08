@@ -29,7 +29,5 @@ public class MovieServiceImpl implements MovieService {
 		movie = mapper.load(MovieClassification.class, movieId);
 	}
 		return movie.getIdentifier();
-
 	}
-
 }

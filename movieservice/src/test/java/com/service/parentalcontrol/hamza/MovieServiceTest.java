@@ -55,7 +55,7 @@ public class MovieServiceTest {
     }
 
     @Test
-    public void invalidParentalControl() throws Exception {
+    public void notEqualParentalControl() throws Exception {
         MovieClassification movie = MovieClassification.builder().movieId("1").identifier("PG").build();
 
         String movieId = movie.getMovieId();
