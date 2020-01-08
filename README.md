@@ -1,6 +1,7 @@
-## Build Status Dev
 
-[![CircleCI](https://circleci.com/gh/hamzabusuri/avios-api-challenge/tree/dev.svg?style=svg&circle-token=01a3b9ffa7b03ae35f40424f6b07f54fede58295)](https://circleci.com/gh/hamzabusuri/avios-api-challenge/tree/dev)
+## Build Status Master
+
+[![CircleCI](https://circleci.com/gh/hamzabusuri/avios-api-challenge/tree/master.svg?style=svg&circle-token=01a3b9ffa7b03ae35f40424f6b07f54fede58295)](https://circleci.com/gh/hamzabusuri/avios-api-challenge/tree/master)
 
 # Parental Control API Service
 
