@@ -1,13 +1,12 @@
 package com.service.parentalcontrol.hamza.impl;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.service.parentalcontrol.hamza.service.MovieService;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
+import com.service.parentalcontrol.hamza.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * This stubbed implementation is for purposes of demonstrating application functionality.

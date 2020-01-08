@@ -2,15 +2,13 @@ package com.service.parentalcontrol.hamza.controller;
 
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
-import com.service.parentalcontrol.hamza.model.MovieClassification;
 import com.service.parentalcontrol.hamza.model.ParentalControlRating;
-import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 import com.service.parentalcontrol.hamza.service.ParentalControlService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 
 //hosting the endpoint to connect to restful API service.
