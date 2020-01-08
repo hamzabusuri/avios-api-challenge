@@ -2,6 +2,7 @@ package com.service.parentalcontrol.hamza;
 
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
+import com.service.parentalcontrol.hamza.impl.MovieServiceImpl;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
 import com.service.parentalcontrol.hamza.service.MovieService;
 import org.junit.Before;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest()
 public class MovieServiceTest {
 
-    private MovieService movieService;
+    private MovieServiceImpl movieService;
 
     @Test
     public void contextLoads() {
@@ -26,7 +27,7 @@ public class MovieServiceTest {
 
     @Before
     public void setup() throws TechnicalFailureException, TitleNotFoundException {
-        movieService = mock(MovieService.class, RETURNS_SMART_NULLS);
+        movieService = mock(MovieServiceImpl.class, RETURNS_SMART_NULLS);
     }
 
     @Test
