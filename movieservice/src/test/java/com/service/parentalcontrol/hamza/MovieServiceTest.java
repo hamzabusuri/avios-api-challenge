@@ -6,23 +6,18 @@ import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
 import com.service.parentalcontrol.hamza.impl.MovieServiceImpl;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
 import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
-import com.service.parentalcontrol.hamza.service.MovieService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest()

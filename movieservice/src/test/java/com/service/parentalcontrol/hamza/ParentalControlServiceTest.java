@@ -1,10 +1,5 @@
 package com.service.parentalcontrol.hamza;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
@@ -12,23 +7,18 @@ import com.service.parentalcontrol.hamza.impl.ParentalControlServiceImpl;
 import com.service.parentalcontrol.hamza.model.MovieClassification;
 import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 import com.service.parentalcontrol.hamza.service.MovieService;
-import com.service.parentalcontrol.hamza.service.ParentalControlService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.Configuration;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest()
