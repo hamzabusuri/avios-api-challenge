@@ -3,7 +3,7 @@ package com.service.parentalcontrol.hamza.impl;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.service.parentalcontrol.hamza.exception.TechnicalFailureException;
 import com.service.parentalcontrol.hamza.exception.TitleNotFoundException;
-import com.service.parentalcontrol.hamza.model.MovieClassification;
+import com.service.parentalcontrol.hamza.repository.DynamoDbRepository;
 import com.service.parentalcontrol.hamza.service.MovieService;
 import com.service.parentalcontrol.hamza.service.ParentalControlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,9 @@ public class ParentalControlServiceImpl implements ParentalControlService {
     @Autowired
     private DynamoDBMapper mapper;
 
+    @Autowired
+    private DynamoDbRepository repo;
+
     boolean result = false;
     boolean exists = false;
 
@@ -25,12 +28,16 @@ public class ParentalControlServiceImpl implements ParentalControlService {
         this.movieService = movieService;
     }
 
+    public ParentalControlServiceImpl (DynamoDBMapper mapper) {
+        this.mapper = mapper;
+    }
+
     public ParentalControlServiceImpl () {
     }
 
     @Override
     public boolean checkParentalControlLevel(String movieId, String userPreference) throws TitleNotFoundException, TechnicalFailureException {
-        boolean mExists = movieExists(movieId);
+        boolean mExists = repo.getMovieDetails(movieId);
         if(mExists){
             String movie = movieService.getParentalControlLevel(movieId);
 
@@ -119,18 +126,5 @@ public class ParentalControlServiceImpl implements ParentalControlService {
             result = false;
         }
 
-    }
-
-    public boolean movieExists(String movieId) throws TitleNotFoundException {
-        MovieClassification itemRetrieved = mapper.load(MovieClassification.class, movieId);
-
-        if(itemRetrieved != null){
-            exists = true;
-        }
-
-        else{
-            throw new TitleNotFoundException("The movie service could not find the given movie");
-        }
-        return exists;
     }
 }
