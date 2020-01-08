@@ -59,6 +59,7 @@ public class ParentalControlServiceTest {
 
         when(movieService.getParentalControlLevel(movieId)).thenReturn(movieLevel);
         when(pcs.checkParentalControlLevel(movieId, userLevel)).thenReturn(true);
+        assertTrue(pcs.checkParentalControlLevel(movieId, userLevel));
     }
 
     @Test
